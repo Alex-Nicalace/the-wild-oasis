@@ -48,22 +48,16 @@ const variations = {
   `,
 };
 
-const Button = styled.button`
-  font-size: 1.4rem;
-  padding: 1.2rem 1.6rem;
-  font-weight: 500;
+interface IButtonProps {
+  size?: keyof typeof sizes;
+  variation?: keyof typeof variations;
+}
+const Button = styled.button<IButtonProps>`
   border: none;
   border-radius: var(--border-radius-sm);
-  background-color: var(--color-brand-600);
-  color: var(--color-brand-50);
   box-shadow: var(--shadow-sm);
-  cursor: pointer;
-
-  @media (pointer: fine) {
-    &:hover {
-      background-color: var(--color-brand-700);
-    }
-  }
+  ${(props) => sizes[props.size || 'medium']}
+  ${(props) => variations[props.variation || 'primary']}
 `;
 
 export default Button;

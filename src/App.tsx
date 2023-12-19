@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
 import Button from './ui/Button';
-
-const H1 = styled.h1`
-  font-size: 30px;
-  font-weight: 600;
-`;
+import Heading from './ui/Heading';
+import Row from './ui/Row';
+import Input from './ui/Input';
 
 const StyledApp = styled.main`
-  background-color: orangered;
   padding: 20px;
 `;
 
@@ -17,8 +14,21 @@ function App(): JSX.Element {
     <>
       <GlobalStyles />
       <StyledApp>
-        <H1>Hello, World!</H1>
-        <Button>Button</Button>
+        <Row type="horizontal">
+          <Heading as="h1">Hello, World!</Heading>
+          <div>
+            <Heading as="h2">Hello, World!</Heading>
+            <Button>Button</Button>
+            <Button>Button</Button>
+          </div>
+        </Row>
+        <Row>
+          <Heading as="h3">Form</Heading>
+          <form action="#">
+            <Input placeholder="Email" />
+            <Input placeholder="Email" />
+          </form>
+        </Row>
       </StyledApp>
     </>
   );
