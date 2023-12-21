@@ -1,6 +1,6 @@
-import Heading from "../ui/Heading";
+import Heading from '../ui/Heading';
 
-function NewUsers() {
+function NewUsers(): JSX.Element {
   return <Heading as="h1">Create a new user</Heading>;
 }
 

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const LoginLayout = styled.main`
   min-height: 100vh;
@@ -10,7 +10,7 @@ const LoginLayout = styled.main`
   background-color: var(--color-grey-50);
 `;
 
-function Login() {
+function Login(): JSX.Element {
   return <LoginLayout>Login</LoginLayout>;
 }
 

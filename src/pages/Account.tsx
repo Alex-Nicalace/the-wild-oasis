@@ -1,7 +1,7 @@
-import Heading from "../ui/Heading";
-import Row from "../ui/Row";
+import Heading from '../ui/Heading';
+import Row from '../ui/Row';
 
-function Account() {
+function Account(): JSX.Element {
   return (
     <>
       <Heading as="h1">Update your account</Heading>
