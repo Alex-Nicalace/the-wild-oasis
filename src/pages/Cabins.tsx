@@ -1,7 +1,7 @@
-import Heading from "../ui/Heading";
-import Row from "../ui/Row";
+import Heading from '../ui/Heading';
+import Row from '../ui/Row';
 
-function Cabins() {
+function Cabins(): JSX.Element {
   return (
     <Row type="horizontal">
       <Heading as="h1">All cabins</Heading>
