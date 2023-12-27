@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import { TCabin } from '../../pages/Cabins';
 import { formatCurrency } from '../../utils/helpers';
@@ -64,15 +65,14 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
   const { isPending, mutate } = useMutation({
     mutationFn: deleteCabin,
     onSuccess: () => {
+      toast.success('Cabin successfully deleted');
       // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
     },
     onError: (err) => {
-      alert(err.message);
+      toast.error(err.message);
     },
   });
-
-  console.log({ isPending });
 
   return (
     <TableRow role="row">
