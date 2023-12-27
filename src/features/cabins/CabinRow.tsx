@@ -1,4 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { TCabin } from '../../pages/Cabins';
+import { formatCurrency } from '../../utils/helpers';
+import { deleteCabin } from '../../services/apiCabins';
 
 const TableRow = styled.div`
   display: grid;
@@ -25,16 +30,62 @@ const Cabin = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
-  font-family: "Sono";
+  font-family: 'Sono';
 `;
 
 const Price = styled.div`
-  font-family: "Sono";
+  font-family: 'Sono';
   font-weight: 600;
 `;
 
 const Discount = styled.div`
-  font-family: "Sono";
+  font-family: 'Sono';
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+interface ICabinRowProps {
+  cabin: TCabin;
+}
+
+function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
+  const {
+    image,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    id: cabinId,
+  } = cabin;
+  // Доступ к данным, которые были созданы с помощью new QueryClient()
+  const queryClient = useQueryClient();
+
+  // Mutations
+  const { isPending, mutate } = useMutation({
+    mutationFn: deleteCabin,
+    onSuccess: () => {
+      // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  console.log({ isPending });
+
+  return (
+    <TableRow role="row">
+      <Img src={image || undefined} alt={name || undefined} />
+      <Cabin>{name}</Cabin>
+      <div>{maxCapacity}</div>
+      <Price>{formatCurrency(regularPrice || 0)}</Price>
+      <Discount>{formatCurrency(discount || 0)}</Discount>
+      <button onClick={() => mutate(cabinId)} disabled={isPending}>
+        Delete
+      </button>
+    </TableRow>
+  );
+}
+
+export default CabinRow;
