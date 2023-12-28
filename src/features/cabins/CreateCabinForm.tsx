@@ -1,86 +1,140 @@
-import styled from "styled-components";
+import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
-import Input from "../../ui/Input";
-import Form from "../../ui/Form";
-import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
-import Textarea from "../../ui/Textarea";
+import Input from '../../ui/Input';
+import Form from '../../ui/Form';
+import Button from '../../ui/Button';
+import FileInput from '../../ui/FileInput';
+import Textarea from '../../ui/Textarea';
+import { createCabin } from '../../services/apiCabins';
+import FormRow from '../../ui/FormRow';
 
-const FormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
-
-  padding: 1.2rem 0;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
-`;
-
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
+// Задаем типы входных данных для формы
+type TInputs = {
+  name: string;
+  maxCapacity: number;
+  regularPrice: number;
+  discount: number;
+  descr: string;
+  // image: File;
+  image: string;
+};
 
 function CreateCabinForm() {
+  const {
+    register, // функция регистрации инпута в форме
+    handleSubmit, // функция обработки события отправки формы
+    reset, // функция для очистки формы
+    getValues /* чтения значений формыю Разница между watch и getValuesзаключается в том, 
+    что они getValues не вызывают повторную визуализацию или подписку на изменения входных данных. */,
+    formState: { errors },
+  } = useForm<TInputs>(); // Используем хук useForm с указанием типов входных данных
+  // Доступ к данным, которые были созданы с помощью new QueryClient()
+  const queryClient = useQueryClient();
+
+  // Mutations
+  const { isPending: isCreating, mutate } = useMutation({
+    mutationFn: createCabin,
+    onSuccess: () => {
+      toast.success('Cabin successfully created');
+      // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+      reset();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+  // Обработчик события отправки формы
+  const onSubmit: SubmitHandler<TInputs> = (data) => mutate(data);
+
+  function onError(err: FieldErrors<TInputs>) {
+    console.error(err);
+  }
+
   return (
-    <Form>
-      <FormRow>
-        <Label htmlFor="name">Cabin name</Label>
-        <Input type="text" id="name" />
+    /* "handleSubmit" будет валидировать ваши инпуты перед вызовом "onSubmit"
+    в случае ошибки будет вызвана функция onError */
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <FormRow label="Cabin name" error={errors.name?.message}>
+        {/* Регистрируем инпут в форме с помощью функции "register" */}
+        <Input
+          type="text"
+          id="name"
+          disabled={isCreating}
+          {...register('name', { required: 'This field is required' })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <Input type="number" id="maxCapacity" />
+      <FormRow label="Maximum capacity" error={errors.maxCapacity?.message}>
+        <Input
+          type="number"
+          id="maxCapacity"
+          disabled={isCreating}
+          {...register('maxCapacity', {
+            required: 'This field is required',
+            min: { value: 1, message: 'Minimum value is 1' },
+            valueAsNumber: true,
+          })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
-        <Input type="number" id="regularPrice" />
+      <FormRow label="Regular price" error={errors.regularPrice?.message}>
+        <Input
+          type="number"
+          id="regularPrice"
+          disabled={isCreating}
+          {...register('regularPrice', {
+            valueAsNumber: true,
+            required: 'This field is required',
+            min: { value: 1, message: 'Minimum value is 1' },
+          })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="discount">Discount</Label>
-        <Input type="number" id="discount" defaultValue={0} />
+      <FormRow label="Discount" error={errors.discount?.message}>
+        <Input
+          type="number"
+          id="discount"
+          defaultValue={0}
+          disabled={isCreating}
+          {...register('discount', {
+            required: 'This field is required',
+            valueAsNumber: true,
+            validate: (value) =>
+              (value >= 0 && value < getValues().regularPrice) ||
+              'Discount must be less than regular price',
+          })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="description">Description for website</Label>
-        <Textarea type="number" id="description" defaultValue="" />
+      <FormRow label="Description" error={errors.descr?.message}>
+        <Textarea
+          id="description"
+          disabled={isCreating}
+          defaultValue=""
+          {...register('descr', { required: 'This field is required' })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
+      <FormRow label="Cabin photo" error={errors.image?.message}>
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register('image')}
+          disabled={isCreating}
+        />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
-          Cancel
-        </Button>
-        <Button>Edit cabin</Button>
+        <>
+          <Button variation="secondary" type="reset">
+            Cancel
+          </Button>
+          <Button disabled={isCreating}>Add cabin</Button>
+        </>
       </FormRow>
     </Form>
   );
