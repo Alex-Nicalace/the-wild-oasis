@@ -28,9 +28,9 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
-interface ICabinTableProps {}
+// interface ICabinTableProps {}
 
-function CabinTable({}: ICabinTableProps): JSX.Element {
+function CabinTable(): JSX.Element {
   const {
     data: cabins,
     isLoading,

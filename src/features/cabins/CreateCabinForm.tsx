@@ -11,14 +11,14 @@ import { createCabin } from '../../services/apiCabins';
 import FormRow from '../../ui/FormRow';
 
 // Задаем типы входных данных для формы
-type TInputs = {
+export type TInputs = {
   name: string;
   maxCapacity: number;
   regularPrice: number;
   discount: number;
   descr: string;
-  // image: File;
-  image: string;
+  image: File[];
+  // image: string;
 };
 
 function CreateCabinForm() {
@@ -47,7 +47,10 @@ function CreateCabinForm() {
     },
   });
   // Обработчик события отправки формы
-  const onSubmit: SubmitHandler<TInputs> = (data) => mutate(data);
+  const onSubmit: SubmitHandler<TInputs> = (data) => {
+    console.log(data);
+    mutate({ ...data, image: data.image[0] });
+  };
 
   function onError(err: FieldErrors<TInputs>) {
     console.error(err);
@@ -122,7 +125,9 @@ function CreateCabinForm() {
         <FileInput
           id="image"
           accept="image/*"
-          {...register('image')}
+          {...register('image', {
+            required: 'This field is required',
+          })}
           disabled={isCreating}
         />
       </FormRow>
