@@ -1,12 +1,10 @@
 import styled from 'styled-components';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 import { TCabin } from '../../pages/Cabins';
 import { formatCurrency } from '../../utils/helpers';
-import { deleteCabin } from '../../services/apiCabins';
-import { useState } from 'react';
 import CreateCabinForm from './CreateCabinForm';
+import { useDeleteCabin } from './useDeleteCabin';
 
 const TableRow = styled.div`
   display: grid;
@@ -61,21 +59,8 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
     id: cabinId,
   } = cabin;
   // Доступ к данным, которые были созданы с помощью new QueryClient()
-  const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
-
-  // Mutations
-  const { isPending, mutate } = useMutation({
-    mutationFn: deleteCabin,
-    onSuccess: () => {
-      toast.success('Cabin successfully deleted');
-      // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const { isDeleting, deleteCabin } = useDeleteCabin();
 
   return (
     <>
@@ -84,12 +69,16 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
         <Cabin>{name}</Cabin>
         <div>{maxCapacity}</div>
         <Price>{formatCurrency(regularPrice || 0)}</Price>
-        <Discount>{formatCurrency(discount || 0)}</Discount>
+        {discount ? (
+          <Discount>{formatCurrency(discount)}</Discount>
+        ) : (
+          <span>&mdash;</span>
+        )}
         <div>
           <button onClick={() => setShowForm((showForm) => !showForm)}>
             Edit
           </button>
-          <button onClick={() => mutate(cabinId)} disabled={isPending}>
+          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
             Delete
           </button>
         </div>

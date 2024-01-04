@@ -1,6 +1,4 @@
 import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 
 import Input from '../../ui/Input';
 import Form from '../../ui/Form';
@@ -8,8 +6,9 @@ import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
 import FormRow from '../../ui/FormRow';
-import { TNewCabin, createEditCabin } from '../../services/apiCabins';
 import { TCabin } from '../../pages/Cabins';
+import { useCreateCabin } from './useCreateCabin';
+import { useEditCabin } from './useEditCabin';
 
 // Задаем типы входных данных для формы
 export type TInputs = {
@@ -25,7 +24,6 @@ export type TInputs = {
 interface ICreateCabinFormProps {
   cabinToEdit?: TCabin;
 }
-
 function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
   const { id: editId, ...editValues } = cabinToEdit || {};
   const {
@@ -36,41 +34,9 @@ function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
     что они getValues не вызывают повторную визуализацию или подписку на изменения входных данных. */,
     formState: { errors },
   } = useForm<TInputs>({ defaultValues: editId ? editValues : {} }); // Используем хук useForm с указанием типов входных данных
-  // Доступ к данным, которые были созданы с помощью new QueryClient()
-  const queryClient = useQueryClient();
 
-  // Mutations
-  const { isPending: isCreating, mutate: createCabin } = useMutation({
-    mutationFn: createEditCabin,
-    onSuccess: () => {
-      toast.success('Cabin successfully created');
-      // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
-  const { isPending: isEditing, mutate: editCabin } = useMutation({
-    mutationFn: ({
-      cabinData,
-      editId,
-    }: {
-      cabinData: TNewCabin;
-      editId: number;
-    }) => createEditCabin(cabinData, editId),
-    onSuccess: () => {
-      toast.success('Cabin successfully edited');
-      // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const { isCreating, createCabin } = useCreateCabin();
+  const { isEditing, editCabin } = useEditCabin();
 
   const isWorking = isCreating || isEditing;
 
@@ -80,9 +46,17 @@ function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
       ...data,
       image: typeof data.image === 'string' ? data.image : data.image[0],
     };
-    if (editId) {
-      editCabin({ cabinData, editId });
-    } else createCabin(cabinData);
+    if (editId)
+      editCabin(
+        { cabinData, editId },
+        {
+          onSuccess: () => reset(),
+        }
+      );
+    else
+      createCabin(cabinData, {
+        onSuccess: () => reset(),
+      });
   };
 
   function onError(err: FieldErrors<TInputs>) {
