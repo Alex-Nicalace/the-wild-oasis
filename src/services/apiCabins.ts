@@ -1,6 +1,5 @@
 import { TInputs } from '../features/cabins/CreateCabinForm';
 import { randomString } from '../utils/helpers';
-import { Database } from './database.types';
 import supabase, { supabaseUrl } from './supabase';
 
 export async function getCabins() {
@@ -23,16 +22,23 @@ export async function deleteCabin(id: number) {
   }
 }
 
-export async function createCabin(
-  newCabin: Omit<TInputs, 'image'> & { image: File }
-) {
+export type TNewCabin = Omit<TInputs, 'image'> & { image: File };
+export async function createEditCabin(newCabin: TNewCabin, id?: number) {
   //  1. создать уникальный имя изображения
   const imgName = `${randomString()}-${newCabin.image.name}`.replace(/\//g, '');
-  const imgPath = `${supabaseUrl}/storage/v1/object/public/cabins-image/${imgName}`;
-  const { data, error } = await supabase
-    .from('cabins')
-    .insert([{ ...newCabin, image: imgPath }])
-    .returns<Database['public']['Tables']['cabins']['Row']>();
+  const imgPath =
+    typeof newCabin.image === 'string'
+      ? newCabin.image
+      : `${supabaseUrl}/storage/v1/object/public/cabins-image/${imgName}`;
+
+  let queryTable = supabase.from('cabins');
+
+  // вставить кабину в базу данных или обновить
+  const queryOperation = !id
+    ? queryTable.insert([{ ...newCabin, image: imgPath }])
+    : queryTable.update({ ...newCabin, image: imgPath }).eq('id', id);
+
+  const { data, error } = await queryOperation.select().single();
 
   if (error) {
     console.error(error);

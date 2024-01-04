@@ -7,8 +7,9 @@ import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
-import { createCabin } from '../../services/apiCabins';
 import FormRow from '../../ui/FormRow';
+import { TNewCabin, createEditCabin } from '../../services/apiCabins';
+import { TCabin } from '../../pages/Cabins';
 
 // Задаем типы входных данных для формы
 export type TInputs = {
@@ -21,7 +22,12 @@ export type TInputs = {
   // image: string;
 };
 
-function CreateCabinForm() {
+interface ICreateCabinFormProps {
+  cabinToEdit?: TCabin;
+}
+
+function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
+  const { id: editId, ...editValues } = cabinToEdit || {};
   const {
     register, // функция регистрации инпута в форме
     handleSubmit, // функция обработки события отправки формы
@@ -29,13 +35,13 @@ function CreateCabinForm() {
     getValues /* чтения значений формыю Разница между watch и getValuesзаключается в том, 
     что они getValues не вызывают повторную визуализацию или подписку на изменения входных данных. */,
     formState: { errors },
-  } = useForm<TInputs>(); // Используем хук useForm с указанием типов входных данных
+  } = useForm<TInputs>({ defaultValues: editId ? editValues : {} }); // Используем хук useForm с указанием типов входных данных
   // Доступ к данным, которые были созданы с помощью new QueryClient()
   const queryClient = useQueryClient();
 
   // Mutations
-  const { isPending: isCreating, mutate } = useMutation({
-    mutationFn: createCabin,
+  const { isPending: isCreating, mutate: createCabin } = useMutation({
+    mutationFn: createEditCabin,
     onSuccess: () => {
       toast.success('Cabin successfully created');
       // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
@@ -46,10 +52,37 @@ function CreateCabinForm() {
       toast.error(err.message);
     },
   });
+
+  const { isPending: isEditing, mutate: editCabin } = useMutation({
+    mutationFn: ({
+      cabinData,
+      editId,
+    }: {
+      cabinData: TNewCabin;
+      editId: number;
+    }) => createEditCabin(cabinData, editId),
+    onSuccess: () => {
+      toast.success('Cabin successfully edited');
+      // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+      reset();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const isWorking = isCreating || isEditing;
+
   // Обработчик события отправки формы
   const onSubmit: SubmitHandler<TInputs> = (data) => {
-    console.log(data);
-    mutate({ ...data, image: data.image[0] });
+    const cabinData = {
+      ...data,
+      image: typeof data.image === 'string' ? data.image : data.image[0],
+    };
+    if (editId) {
+      editCabin({ cabinData, editId });
+    } else createCabin(cabinData);
   };
 
   function onError(err: FieldErrors<TInputs>) {
@@ -65,7 +98,7 @@ function CreateCabinForm() {
         <Input
           type="text"
           id="name"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register('name', { required: 'This field is required' })}
         />
       </FormRow>
@@ -74,7 +107,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="maxCapacity"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register('maxCapacity', {
             required: 'This field is required',
             min: { value: 1, message: 'Minimum value is 1' },
@@ -87,7 +120,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="regularPrice"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register('regularPrice', {
             valueAsNumber: true,
             required: 'This field is required',
@@ -101,7 +134,7 @@ function CreateCabinForm() {
           type="number"
           id="discount"
           defaultValue={0}
-          disabled={isCreating}
+          disabled={isWorking}
           {...register('discount', {
             required: 'This field is required',
             valueAsNumber: true,
@@ -115,7 +148,7 @@ function CreateCabinForm() {
       <FormRow label="Description" error={errors.descr?.message}>
         <Textarea
           id="description"
-          disabled={isCreating}
+          disabled={isWorking}
           defaultValue=""
           {...register('descr', { required: 'This field is required' })}
         />
@@ -126,9 +159,9 @@ function CreateCabinForm() {
           id="image"
           accept="image/*"
           {...register('image', {
-            required: 'This field is required',
+            required: editId ? false : 'This field is required',
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -138,7 +171,7 @@ function CreateCabinForm() {
           <Button variation="secondary" type="reset">
             Cancel
           </Button>
-          <Button disabled={isCreating}>Add cabin</Button>
+          <Button disabled={isWorking}>{editId ? 'Edit' : 'Add cabin'}</Button>
         </>
       </FormRow>
     </Form>
