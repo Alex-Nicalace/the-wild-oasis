@@ -1,6 +1,7 @@
+import supabase, { supabaseUrl } from './supabase';
+
 import { TInputs } from '../features/cabins/CreateCabinForm';
 import { randomString } from '../utils/helpers';
-import supabase, { supabaseUrl } from './supabase';
 
 export async function getCabins() {
   const { data, error } = await supabase.from('cabins').select('*');
