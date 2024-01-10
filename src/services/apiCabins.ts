@@ -22,10 +22,13 @@ export async function deleteCabin(id: number) {
   }
 }
 
-export type TNewCabin = Omit<TInputs, 'image'> & { image: File };
+export type TNewCabin = Omit<TInputs, 'image'> & { image: File | string };
 export async function createEditCabin(newCabin: TNewCabin, id?: number) {
   //  1. создать уникальный имя изображения
-  const imgName = `${randomString()}-${newCabin.image.name}`.replace(/\//g, '');
+  const imgName =
+    newCabin.image instanceof File
+      ? `${randomString()}-${newCabin.image.name}`.replace(/\//g, '')
+      : '';
   const imgPath =
     typeof newCabin.image === 'string'
       ? newCabin.image
@@ -46,6 +49,8 @@ export async function createEditCabin(newCabin: TNewCabin, id?: number) {
   }
 
   // 2. загрузить изображение
+  if (typeof newCabin.image === 'string') return data;
+
   const { error: uploadError } = await supabase.storage
     .from('cabins-image')
     .upload(imgName, newCabin.image);

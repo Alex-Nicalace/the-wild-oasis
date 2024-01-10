@@ -5,6 +5,8 @@ import { TCabin } from '../../pages/Cabins';
 import { formatCurrency } from '../../utils/helpers';
 import CreateCabinForm from './CreateCabinForm';
 import { useDeleteCabin } from './useDeleteCabin';
+import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+import { useCreateCabin } from './useCreateCabin';
 
 const TableRow = styled.div`
   display: grid;
@@ -56,11 +58,27 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
     maxCapacity,
     regularPrice,
     discount,
+    descr,
     id: cabinId,
   } = cabin;
   // Доступ к данным, которые были созданы с помощью new QueryClient()
   const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { isCreating, createCabin } = useCreateCabin();
+
+  const isWorking = isDeleting || isCreating;
+
+  function handleDuplicateCabin() {
+    if (name && maxCapacity && regularPrice && discount && descr && image)
+      createCabin({
+        image,
+        name: `Copy of ${name}`,
+        maxCapacity,
+        regularPrice,
+        discount,
+        descr,
+      });
+  }
 
   return (
     <>
@@ -75,11 +93,17 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
           <span>&mdash;</span>
         )}
         <div>
-          <button onClick={() => setShowForm((showForm) => !showForm)}>
-            Edit
+          <button onClick={handleDuplicateCabin} disabled={isWorking}>
+            <HiSquare2Stack />
           </button>
-          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
-            Delete
+          <button
+            onClick={() => setShowForm((showForm) => !showForm)}
+            disabled={isWorking}
+          >
+            <HiPencil />
+          </button>
+          <button onClick={() => deleteCabin(cabinId)} disabled={isWorking}>
+            <HiTrash />
           </button>
         </div>
       </TableRow>
