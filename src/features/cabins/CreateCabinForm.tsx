@@ -23,8 +23,9 @@ export type TInputs = {
 
 interface ICreateCabinFormProps {
   cabinToEdit?: TCabin;
+  onCloseModal?: () => void;
 }
-function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
+function CreateCabinForm({ cabinToEdit, onCloseModal }: ICreateCabinFormProps) {
   const { id: editId, ...editValues } = cabinToEdit || {};
   const {
     register, // функция регистрации инпута в форме
@@ -50,12 +51,18 @@ function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
       editCabin(
         { cabinData, editId },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
     else
       createCabin(cabinData, {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          reset();
+          onCloseModal?.();
+        },
       });
   };
 
@@ -66,7 +73,10 @@ function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
   return (
     /* "handleSubmit" будет валидировать ваши инпуты перед вызовом "onSubmit"
     в случае ошибки будет вызвана функция onError */
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? 'modal' : 'regular'}
+    >
       <FormRow label="Cabin name" error={errors.name?.message}>
         {/* Регистрируем инпут в форме с помощью функции "register" */}
         <Input
@@ -142,7 +152,7 @@ function CreateCabinForm({ cabinToEdit }: ICreateCabinFormProps) {
       <FormRow>
         {/* type is an HTML attribute! */}
         <>
-          <Button variation="secondary" type="reset">
+          <Button variation="secondary" type="reset" onClick={onCloseModal}>
             Cancel
           </Button>
           <Button disabled={isWorking}>{editId ? 'Edit' : 'Add cabin'}</Button>
