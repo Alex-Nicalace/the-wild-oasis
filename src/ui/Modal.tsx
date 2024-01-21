@@ -1,3 +1,4 @@
+import { createContext, useContext, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
@@ -50,23 +51,67 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+// контекст для модального окна
+const ModalContext = createContext<{
+  openName: string;
+  open: (name: string) => void;
+  close: () => void;
+}>({
+  openName: '',
+  open: () => {},
+  close: () => {},
+});
 
-interface IModalProps {
-  children: React.ReactNode;
-  onClose: () => void;
+// родительский компонент модального окна с контекстом
+function Modal({ children }: { children: React.ReactNode }): JSX.Element {
+  const [openName, setOpenName] = useState('');
+
+  const close = () => setOpenName('');
+  const open = (name: string) => setOpenName(name);
+
+  return (
+    <ModalContext.Provider value={{ openName, open, close }}>
+      {children}
+    </ModalContext.Provider>
+  );
 }
-function Modal({ children, onClose }: IModalProps): JSX.Element {
+
+// компонент для открытия модального окна
+function Open({
+  render,
+}: {
+  render: (open: (name: string) => void) => JSX.Element;
+}): JSX.Element {
+  const { open } = useContext(ModalContext);
+  return <>{render(open)}</>;
+}
+
+// компонент для модального окна
+function Window({
+  render,
+  windowName,
+}: {
+  render: (close: () => void) => JSX.Element;
+  windowName: string;
+}): JSX.Element {
+  const { close, openName } = useContext(ModalContext);
+
+  if (openName !== windowName) return <></>;
+
   return createPortal(
     <Overlay>
       <StyledModal>
-        <Button onClick={onClose}>
+        <Button onClick={close}>
           <HiXMark />
         </Button>
-        <div>{children}</div>
+        {render(close)}
       </StyledModal>
     </Overlay>,
     document.body
   );
 }
+
+Modal.Window = Window;
+Modal.Open = Open;
 
 export default Modal;

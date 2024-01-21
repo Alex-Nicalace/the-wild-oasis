@@ -1,23 +1,23 @@
-import { useState } from 'react';
 import Button from '../../ui/Button';
 import CreateCabinForm from './CreateCabinForm';
 import Modal from '../../ui/Modal';
 
-interface IAddCabinProps {}
-function AddCabin({}: IAddCabinProps): JSX.Element {
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
+function AddCabin(): JSX.Element {
   return (
-    <>
-      <Button onClick={() => setIsOpenModal((showForm) => !showForm)}>
-        Add new cabin
-      </Button>
-      {isOpenModal && (
-        <Modal onClose={() => setIsOpenModal(false)}>
-          <CreateCabinForm onCloseModal={() => setIsOpenModal(false)} />
-        </Modal>
-      )}
-    </>
+    // родительский компонент модального окна с контекстом
+    <Modal>
+      {/* компонент для открытия модального окна */}
+      <Modal.Open
+        render={(open) => (
+          <Button onClick={() => open('create-cabin')}>Add new cabin</Button>
+        )}
+      />
+      {/* компонент для модального окна */}
+      <Modal.Window
+        windowName="create-cabin"
+        render={(close) => <CreateCabinForm onCloseModal={close} />}
+      />
+    </Modal>
   );
 }
 
