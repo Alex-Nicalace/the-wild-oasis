@@ -4,8 +4,8 @@ import ModalDialog from '../../ui/ModalDialog';
 
 function AddCabin(): JSX.Element {
   return (
-    // родительский компонент модального окна с контекстом
-    <>
+    <div>
+      {/* родительский компонент модального окна с контекстом */}
       <ModalDialog>
         {/* компонент для открытия модального окна */}
         <ModalDialog.Open
@@ -19,7 +19,7 @@ function AddCabin(): JSX.Element {
           render={(close) => <CreateCabinForm onCloseModal={close} />}
         />
       </ModalDialog>
-    </>
+    </div>
   );
 }
 
