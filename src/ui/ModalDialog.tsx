@@ -1,30 +1,23 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
 
-const StyledModal = styled.div`
-  position: fixed;
+const StyledModal = styled.dialog`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--color-grey-0);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
+  border: none;
   padding: 3.2rem 4rem;
   transition: all 0.5s;
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: var(--backdrop-color);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-  transition: all 0.5s;
+  &::backdrop {
+    background-color: var(--backdrop-color);
+    backdrop-filter: blur(4px);
+    transition: all 0.5s;
+  }
 `;
 
 const Button = styled.button`
@@ -63,7 +56,7 @@ const ModalContext = createContext<{
 });
 
 // родительский компонент модального окна с контекстом
-function Modal({ children }: { children: React.ReactNode }): JSX.Element {
+function ModalDialog({ children }: { children: React.ReactNode }): JSX.Element {
   const [openName, setOpenName] = useState('');
 
   const close = () => setOpenName('');
@@ -95,27 +88,31 @@ function Window({
   windowName: string;
 }): JSX.Element {
   const { close, openName } = useContext(ModalContext);
+  const dialogEl = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    dialogEl.current?.showModal();
+  });
 
   if (openName !== windowName) return <></>;
 
   return createPortal(
-    <Overlay
+    <StyledModal
+      ref={dialogEl}
+      className="modal"
       onClick={(e) => {
         if (e.target === e.currentTarget) close();
       }}
     >
-      <StyledModal>
-        <Button onClick={close}>
-          <HiXMark />
-        </Button>
-        {render(close)}
-      </StyledModal>
-    </Overlay>,
+      <Button onClick={close}>
+        <HiXMark />
+      </Button>
+      {render(close)}
+    </StyledModal>,
     document.body
   );
 }
 
-Modal.Window = Window;
-Modal.Open = Open;
+ModalDialog.Window = Window;
+ModalDialog.Open = Open;
 
-export default Modal;
+export default ModalDialog;
