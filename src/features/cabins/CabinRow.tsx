@@ -8,6 +8,7 @@ import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 import { useCreateCabin } from './useCreateCabin';
 import ModalDialog from '../../ui/ModalDialog';
 import ConfirmDelete from '../../ui/ConfirmDelete';
+import Menus from '../../ui/Menus';
 
 const TableRow = styled.div`
   display: grid;
@@ -92,29 +93,46 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
         <span>&mdash;</span>
       )}
       <div>
-        <button onClick={handleDuplicateCabin} disabled={isWorking}>
-          <HiSquare2Stack />
-        </button>
         <ModalDialog>
-          <ModalDialog.Open
-            render={(open) => (
-              <button onClick={() => open('edit-cabin')}>
-                <HiPencil />
-              </button>
-            )}
-          />
+          <Menus.Menu>
+            <Menus.Toggle id={String(cabinId)} />
+            <Menus.List id={String(cabinId)}>
+              <Menus.Button
+                onClick={handleDuplicateCabin}
+                disabled={isWorking}
+                icon={<HiSquare2Stack />}
+              >
+                Duplicate
+              </Menus.Button>
+
+              <ModalDialog.Open
+                render={(open) => (
+                  <Menus.Button
+                    icon={<HiPencil />}
+                    onClick={() => open('edit-cabin')}
+                    disabled={isWorking}
+                  >
+                    Edit
+                  </Menus.Button>
+                )}
+              />
+              <ModalDialog.Open
+                render={(open) => (
+                  <Menus.Button
+                    icon={<HiTrash />}
+                    onClick={() => open('delete-cabin')}
+                    disabled={isWorking}
+                  >
+                    Delete
+                  </Menus.Button>
+                )}
+              />
+            </Menus.List>
+          </Menus.Menu>
           <ModalDialog.Window
             windowName="edit-cabin"
             render={(close) => (
               <CreateCabinForm cabinToEdit={cabin} onCloseModal={close} />
-            )}
-          />
-
-          <ModalDialog.Open
-            render={(open) => (
-              <button onClick={() => open('delete-cabin')}>
-                <HiTrash />
-              </button>
             )}
           />
           <ModalDialog.Window
