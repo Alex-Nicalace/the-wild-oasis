@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 import styled from 'styled-components';
 import { useOutsideClick } from '../hooks/useOutsideClick';
+import useLockElementScroll from '../hooks/useLockElementScroll';
 
 const Menu = styled.div`
   display: flex;
@@ -143,6 +144,7 @@ function List({
       return;
     close();
   }, openId !== id);
+  useLockElementScroll(openId !== id, 'main');
 
   if (openId !== id) return <></>;
 

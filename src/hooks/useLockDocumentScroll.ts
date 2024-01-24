@@ -5,8 +5,9 @@ import { useEffect } from 'react';
  *
  * @return {void} Нет возвращаемого значения
  */
-export default function useLockDocumentScroll() {
+export default function useLockDocumentScroll(ignore = false) {
   useEffect(function () {
+    if (ignore) return;
     const widthScroll =
       window.innerWidth - document.documentElement.clientWidth;
     document.documentElement.style.overflow = 'hidden';
