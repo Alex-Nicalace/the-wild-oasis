@@ -5,10 +5,8 @@ import styled from 'styled-components';
 import { useOutsideClick } from '../hooks/useOutsideClick';
 import useLockElementScroll from '../hooks/useLockElementScroll';
 
-const Menu = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+const StyledMenu = styled.div<{ $isRelative?: boolean }>`
+  ${({ $isRelative }) => ($isRelative ? 'position: relative;' : '')}
 `;
 
 const StyledToggle = styled.button`
@@ -39,6 +37,7 @@ const StyledList = styled.ul<{ $position: { x: number; y: number } }>`
 
   right: ${(props) => props.$position.x}px;
   top: ${(props) => props.$position.y}px;
+  z-index: 100;
 `;
 
 const StyledButton = styled.button`
@@ -72,6 +71,7 @@ interface IMenusContext {
   close: () => void;
   position: { x: number; y: number };
   setPosition: React.Dispatch<React.SetStateAction<IPosition>>;
+  isLockScroll: boolean;
 }
 
 interface IPosition {
@@ -85,9 +85,16 @@ const MenusContext = createContext<IMenusContext>({
   close: () => {},
   position: { x: 0, y: 0 },
   setPosition: () => {},
+  isLockScroll: true,
 });
 
-function Menus({ children }: { children: JSX.Element }) {
+function Menus({
+  children,
+  isLockScroll = true,
+}: {
+  children: JSX.Element;
+  isLockScroll?: boolean;
+}) {
   const [openId, setOpenId] = useState('');
   const [position, setPosition] = useState<IPosition>({
     x: 0,
@@ -99,15 +106,21 @@ function Menus({ children }: { children: JSX.Element }) {
 
   return (
     <MenusContext.Provider
-      value={{ openId, open, close, position, setPosition }}
+      value={{ openId, open, close, position, setPosition, isLockScroll }}
     >
       {children}
     </MenusContext.Provider>
   );
 }
 
+function Menu({ children }: { children: React.ReactNode }) {
+  const { isLockScroll } = useContext(MenusContext);
+  return <StyledMenu $isRelative={!isLockScroll}>{children}</StyledMenu>;
+}
+
 function Toggle({ id }: { id: string }) {
-  const { open, close, openId, setPosition } = useContext(MenusContext);
+  const { open, close, openId, setPosition, isLockScroll } =
+    useContext(MenusContext);
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     if (openId === id) {
@@ -122,7 +135,11 @@ function Toggle({ id }: { id: string }) {
     if (!buttonEl) return;
 
     const rect = buttonEl.getBoundingClientRect();
-    setPosition({ x: window.innerWidth - rect.right, y: rect.bottom + 8 });
+    if (isLockScroll) {
+      setPosition({ x: window.innerWidth - rect.right, y: rect.bottom + 8 });
+    } else {
+      setPosition({ x: 0, y: rect.height + 8 });
+    }
   }
   return (
     <StyledToggle onClick={handleClick} data-istoggle>
@@ -138,21 +155,28 @@ function List({
   children: React.ReactNode;
   id: string;
 }): JSX.Element {
-  const { openId, position, close } = useContext(MenusContext);
+  const { openId, position, close, isLockScroll } = useContext(MenusContext);
   const elenemtRef = useOutsideClick<HTMLUListElement>((e) => {
     if (e.target instanceof Element && e.target.closest('[data-istoggle]'))
       return;
     close();
   }, openId !== id);
-  useLockElementScroll(openId !== id, 'main');
+  useLockElementScroll(openId !== id || !isLockScroll, 'main');
 
   if (openId !== id) return <></>;
 
-  return createPortal(
+  if (isLockScroll)
+    return createPortal(
+      <StyledList ref={elenemtRef} $position={position}>
+        {children}
+      </StyledList>,
+      document.body
+    );
+
+  return (
     <StyledList ref={elenemtRef} $position={position}>
       {children}
-    </StyledList>,
-    document.body
+    </StyledList>
   );
 }
 

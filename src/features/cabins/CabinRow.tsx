@@ -49,6 +49,12 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
+const Dropdown = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
 interface ICabinRowProps {
   cabin: TCabin;
 }
@@ -92,7 +98,7 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
       ) : (
         <span>&mdash;</span>
       )}
-      <div>
+      <Dropdown>
         <ModalDialog>
           <Menus.Menu>
             <Menus.Toggle id={String(cabinId)} />
@@ -147,7 +153,7 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
             )}
           />
         </ModalDialog>
-      </div>
+      </Dropdown>
     </TableRow>
   );
 }
