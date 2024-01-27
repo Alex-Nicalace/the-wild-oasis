@@ -4,11 +4,15 @@ import { useCabin } from './useCabin';
 import Table from '../../ui/Table';
 import Menus from '../../ui/Menus';
 import { useSearchParams } from 'react-router-dom';
+import { isTCabinTableKeys } from '../../services/apiCabins';
 
 function CabinTable(): JSX.Element {
   const { cabins, isLoading } = useCabin();
   const [searchParams] = useSearchParams();
 
+  if (isLoading) return <Spinner />;
+
+  // 1. Filter
   const filterValue = searchParams.get('discount') || 'all';
   const filteredCabins =
     filterValue === 'all'
@@ -21,7 +25,26 @@ function CabinTable(): JSX.Element {
           }
         });
 
-  if (isLoading) return <Spinner />;
+  // 2. Sort
+  const [sortBy, direction] = (searchParams.get('sortBy') || 'name-asc').split(
+    '-'
+  );
+  const sortedCabins = isTCabinTableKeys(sortBy)
+    ? filteredCabins?.sort((a, b) => {
+        if (typeof a[sortBy] === 'string' || typeof b[sortBy] === 'string') {
+          const aValue = a[sortBy]?.toString() || '';
+          const bValue = b[sortBy]?.toString() || '';
+          if (direction === 'asc') {
+            return aValue.localeCompare(bValue);
+          }
+          return bValue.localeCompare(aValue);
+        }
+        const aValue = +(a[sortBy] ?? 0);
+        const bValue = +(b[sortBy] ?? 0);
+        const modifier = direction === 'asc' ? 1 : -1;
+        return (aValue - bValue) * modifier;
+      })
+    : filteredCabins;
 
   return (
     <Menus isLockScroll={false}>
@@ -35,7 +58,7 @@ function CabinTable(): JSX.Element {
           <div></div>
         </Table.Header>
         <Table.Body
-          data={filteredCabins || []}
+          data={sortedCabins || []}
           render={(cabin) => <CabinRow key={cabin.id} cabin={cabin} />}
         />
       </Table>

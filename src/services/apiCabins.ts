@@ -2,6 +2,7 @@ import supabase, { supabaseUrl } from './supabase';
 
 import { TInputs } from '../features/cabins/CreateCabinForm';
 import { randomString } from '../utils/helpers';
+import { Tables } from './database.types';
 
 export async function getCabins() {
   const { data, error } = await supabase.from('cabins').select('*');
@@ -12,6 +13,20 @@ export async function getCabins() {
   }
 
   return data;
+}
+
+export type TCabinTableKeys = keyof Tables<'cabins'>;
+export function isTCabinTableKeys(key: string): key is TCabinTableKeys {
+  return [
+    'created_at',
+    'id',
+    'descr',
+    'discount',
+    'image',
+    'maxCapacity',
+    'name',
+    'regularPrice',
+  ].includes(key);
 }
 
 export async function deleteCabin(id: number) {

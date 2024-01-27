@@ -58,6 +58,7 @@ function Filter({ filterField, options }: IFilterProps): JSX.Element {
           key={option.value}
           onClick={() => handleClick(option.value)}
           active={option.value === curentFilter}
+          disabled={option.value === curentFilter}
         >
           {option.label}
         </FilterButton>
