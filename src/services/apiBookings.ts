@@ -14,9 +14,10 @@ export async function getBookings({
     .select('*, cabins(name), guests(fullName, email)');
 
   if (filter) query.eq(filter.field, filter.value);
-  // if (sortBy) {
-  //   query.order(sortBy.field, { ascending: sortBy.value === 'asc' });
-  // }
+
+  if (sortBy) {
+    query.order(sortBy.field, { ascending: sortBy.value === 'asc' });
+  }
 
   const { data, error } = await query;
 

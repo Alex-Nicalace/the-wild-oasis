@@ -33,3 +33,9 @@
 сортировка по полю с неизвестным типом. Желание было не указыавать поля строковые и числовые, а чтобы динамически определять тип поля и применить соответствующий аогоритм сортировки
 
 [CabinTable.tsx](./src/features/cabins/CabinTable.tsx)
+
+## Сортировка и фильтрация на стороне сервера, динамическое создание запроса
+
+[useBookings.tsx](.src/features/bookings/useBookings.ts)
+
+[apiBookings.tsx](.src/services/apiBookings.ts)
