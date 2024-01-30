@@ -39,3 +39,5 @@
 [useBookings.tsx](.src/features/bookings/useBookings.ts)
 
 [apiBookings.tsx](.src/services/apiBookings.ts)
+
+## Pagination
