@@ -36,8 +36,18 @@
 
 ## Сортировка и фильтрация на стороне сервера, динамическое создание запроса
 
-[useBookings.tsx](.src/features/bookings/useBookings.ts)
+[useBookings.tsx](./src/features/bookings/BookingTableOperations.tsx)
 
-[apiBookings.tsx](.src/services/apiBookings.ts)
+[apiBookings.tsx](./src/services/apiBookings.ts)
 
 ## Pagination
+
+Пример переиспользуемого компонента пагинации
+
+пагинация на стороне сервера
+
+[Pagination.tsx](./src/ui/Pagination.tsx)
+
+## Фильтрация запроса с подчетом количества строк не учитывая фильтра
+
+[getBookings](./src/services/apiBookings.ts)

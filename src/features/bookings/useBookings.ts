@@ -20,18 +20,18 @@ export function useBookings() {
     ? undefined
     : { field: sortByValue[0], value: sortByValue[1] };
 
-  const {
-    data: bookings,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['bookings', filter, sortBy],
-    queryFn: () => getBookings({ filter, sortBy }),
+  // pagination
+  const page = Number(searchParams.get('page') || 1);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['bookings', filter, sortBy, page],
+    queryFn: () => getBookings({ filter, sortBy, page }),
   });
 
   return {
     isLoading,
     error,
-    bookings,
+    bookings: data?.bookings,
+    count: data?.count,
   };
 }
