@@ -30,3 +30,7 @@ export const formatCurrency = (value: number) =>
   );
 
 export const randomString = () => Math.random().toString(36).slice(2);
+
+export function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
+  return k in x;
+}

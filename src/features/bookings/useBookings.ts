@@ -54,7 +54,7 @@ export function useBookings() {
   return {
     isLoading,
     error,
-    bookings: bookings,
+    bookings,
     count: count,
   };
 }

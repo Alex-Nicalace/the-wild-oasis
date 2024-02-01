@@ -7,6 +7,9 @@ import Table from '../../ui/Table';
 import { formatCurrency } from '../../utils/helpers';
 import { formatDistanceFromNow } from '../../utils/helpers';
 import { TBookingWithCabinGuests } from '../../services/apiBookings';
+import Menus from '../../ui/Menus';
+import { HiEye } from 'react-icons/hi2';
+import { useNavigate } from 'react-router-dom';
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -50,6 +53,7 @@ function BookingRow({
     cabins,
   },
 }: IBookingRowProps) {
+  const navigate = useNavigate();
   const { fullName: guestName, email } = guests || {};
   const { name: cabinName } = cabins || {};
 
@@ -86,6 +90,18 @@ function BookingRow({
       </Tag>
 
       <Amount>{formatCurrency(totalPrice || 0)}</Amount>
+
+      <Menus.Menu>
+        <Menus.Toggle id={String(bookingId)} />
+        <Menus.List id={String(bookingId)}>
+          <Menus.Button
+            icon={<HiEye />}
+            onClick={() => navigate(`/bookings/${bookingId}`)}
+          >
+            Смотреть бронь
+          </Menus.Button>
+        </Menus.List>
+      </Menus.Menu>
     </Table.Row>
   );
 }
