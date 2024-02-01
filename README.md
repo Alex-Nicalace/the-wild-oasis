@@ -1,3 +1,13 @@
+## React Query
+
+### Components
+
+`QueryClient`, `QueryClientProvider`, `ReactQueryDevtools`
+
+### Hooks
+
+`useQueryClient`, `useQuery`, `useMutation`
+
 ## компонент _Menu.tsx_
 
 Компонент выпадающего меню.
@@ -45,6 +55,10 @@
 Пример переиспользуемого компонента пагинации
 
 пагинация на стороне сервера
+
+### Предварительная загрузка следующей/предыдущей страницы
+
+[useBookings.ts](./src/features/bookings/useBookings.ts)
 
 [Pagination.tsx](./src/ui/Pagination.tsx)
 
