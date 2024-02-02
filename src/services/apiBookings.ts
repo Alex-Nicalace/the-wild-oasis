@@ -118,7 +118,7 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-type TNewBooking = Omit<Tables<'bookings'>, 'id' | 'created_at'>;
+type TNewBooking = Partial<Omit<Tables<'bookings'>, 'id' | 'created_at'>>;
 
 export async function updateBooking(id: number, obj: TNewBooking) {
   const { data, error } = await supabase
