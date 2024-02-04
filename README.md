@@ -14,8 +14,7 @@
 
 - `useQueryClient`,
 - `useQuery`, по умолчанию неудачные запросы повторяются 3 раза, влияет на это поведение параметр `retry`
-- `useMutation`
-- `useMoveBack` - возвращает колбэк, который можно использовать для возврата на один шаг назад в истории браузера
+- `useMutation` - в параметр `mutationFn` можно предавать колбэк только с одним аргументом
 
 ## компонент _Menu.tsx_
 
@@ -34,8 +33,9 @@
 ## Кастомные хуки
 
 - [useLockElementScroll](./src/hooks/useLockElementScroll.ts) - блокирует скрол у указанного по селеутору элемента
-- [useLockDocumentScroll](./src/hooks/useLockDocumentScroll.ts) - блокирует скрл у документа
+- [useLockDocumentScroll](./src/hooks/useLockDocumentScroll.ts) - блокирует скрол у документа
 - [useOutsideClick](./src/hooks/useOutsideClick.ts) - запускает колбэк при клике вне компонента в котором был объявлен
+- `useMoveBack` - возвращает колбэк, который можно использовать для возврата на один шаг назад в истории браузера
 
 ## React Router Dom
 

@@ -1,14 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateBooking } from '../../services/apiBookings';
+import { TBookingRecord, updateBooking } from '../../services/apiBookings';
 import toast from 'react-hot-toast';
 
 export function useCheckin() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { mutate: checkin, isPending: isCheckingIn } = useMutation({
-    mutationFn: (bookingId: number) =>
-      updateBooking(bookingId, { status: 'checked-in', isPaid: true }),
+    mutationFn: ({
+      bookingId,
+      bookingRow,
+    }: {
+      bookingId: number;
+      bookingRow?: TBookingRecord;
+    }) =>
+      updateBooking(bookingId, {
+        status: 'checked-in',
+        isPaid: true,
+        ...bookingRow,
+      }),
 
     onSuccess: ({ id }) => {
       toast.success(`Бронирование №${id} успешно прошло регистрацию!`);
