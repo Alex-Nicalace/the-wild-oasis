@@ -113,7 +113,7 @@ function CheckinBooking() {
 
       <ButtonGroup>
         <Button onClick={handleCheckin} disabled={!confirmPaid || isCheckingIn}>
-          Регистрация при бронировании #{bookingId}
+          Регистрация бронирования #{bookingId}
         </Button>
         <Button variation="secondary" onClick={moveBack}>
           Назад

@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
+import { useMoveBack } from '../../hooks/useMoveBack';
+import { useBooking } from './useBooking';
+import { useCheckout } from '../check-in-out/useCheckout';
+
 import BookingDataBox from './BookingDataBox';
 import Row from '../../ui/Row';
 import Heading from '../../ui/Heading';
@@ -8,10 +12,7 @@ import Tag from '../../ui/Tag';
 import ButtonGroup from '../../ui/ButtonGroup';
 import Button from '../../ui/Button';
 import ButtonText from '../../ui/ButtonText';
-
-import { useMoveBack } from '../../hooks/useMoveBack';
 import Spinner from '../../ui/Spinner';
-import { useBooking } from './useBooking';
 import { isKey } from '../../utils/helpers';
 import Empty from '../../ui/Empty';
 
@@ -25,6 +26,7 @@ function BookingDetail() {
   const { booking, isLoading } = useBooking();
   const moveBack = useMoveBack();
   const navigate = useNavigate();
+  const { checkout, isCheckingOut } = useCheckout();
 
   if (isLoading) return <Spinner />;
   if (!booking) return <Empty resource="booking" />;
@@ -56,6 +58,12 @@ function BookingDetail() {
         {status === 'unconfirmed' && (
           <Button onClick={() => navigate(`/check-in/${bookingId}`)}>
             Зарегистрировать
+          </Button>
+        )}
+
+        {status === 'checked-in' && (
+          <Button onClick={() => checkout(bookingId)} disabled={isCheckingOut}>
+            Выписать
           </Button>
         )}
 

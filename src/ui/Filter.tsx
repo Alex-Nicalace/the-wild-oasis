@@ -48,6 +48,7 @@ function Filter({ filterField, options }: IFilterProps): JSX.Element {
 
   function handleClick(value: string) {
     searchParams.set(filterField, value);
+    searchParams.delete('page');
     setSearchParams(searchParams);
   }
 

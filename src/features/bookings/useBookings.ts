@@ -34,7 +34,7 @@ export function useBookings() {
     queryFn: () => getBookings({ filter, sortBy, page }),
   });
 
-  const totalPage = Math.ceil(count ?? 0 / PAGE_SIZE);
+  const totalPage = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   // предварительная подгрузка следующей страницы
   if (page < totalPage) {
