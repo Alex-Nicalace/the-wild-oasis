@@ -11,10 +11,7 @@ import DataItem from '../../ui/DataItem';
 import { Flag } from '../../ui/Flag';
 
 import { formatDistanceFromNow, formatCurrency } from '../../utils/helpers';
-import {
-  TBookingWithCabinGuests,
-  TBookingWithCabinGuestsExt,
-} from '../../services/apiBookings';
+import { TBookingWithCabinGuestsExt } from '../../services/apiBookings';
 
 const StyledBookingDataBox = styled.section`
   /* Box */

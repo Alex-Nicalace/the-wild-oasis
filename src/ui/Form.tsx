@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 interface IFormProps {
-  type: 'modal' | 'regular';
+  type?: 'modal' | 'regular';
 }
 const Form = styled.form<IFormProps>`
   ${(props) =>

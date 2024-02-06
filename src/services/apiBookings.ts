@@ -1,7 +1,7 @@
+import supabase from './supabase';
 import { getToday } from '../utils/helpers';
 import { PAGE_SIZE } from './constants';
 import { Tables } from './database.types';
-import supabase from './supabase';
 
 export async function getBookings({
   filter,

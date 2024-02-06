@@ -2,7 +2,7 @@
 
 ## pattern Compound component pattern & Render props pattern
 
-Модальное окно с 20-мя патернами проектирования:
+Модальное окно с 2-мя патернами проектирования:
 
 [ModalDialog.tsx](./src/ui/ModalDialog.tsx)
 
@@ -21,6 +21,8 @@
 - `useQueryClient`,
 - `useQuery`, по умолчанию неудачные запросы повторяются 3 раза, влияет на это поведение параметр `retry`
 - `useMutation` - в параметр `mutationFn` можно предавать колбэк только с одним аргументом
+
+## react-hook-form
 
 ## компонент _Menu.tsx_
 
@@ -86,3 +88,13 @@
 ## Фильтрация запроса с подчетом количества строк не учитывая фильтра
 
 [getBookings](./src/services/apiBookings.ts)
+
+## Аунтификация пользователя
+
+[LoginForm.tsx](./src/features/authentication/LoginForm.tsx)
+
+[useLogin.ts](./src/features/authentication/useLogin.ts)
+
+[apiAuth.ts](./src/services/apiAuth.ts)
+
+## Авторизация пользователя
