@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMoveBack } from '../../hooks/useMoveBack';
 import { useBooking } from './useBooking';
 import { useCheckout } from '../check-in-out/useCheckout';
+import { useDeleteBooking } from './useDeleteBooking';
 
 import BookingDataBox from './BookingDataBox';
 import Row from '../../ui/Row';
@@ -15,6 +16,8 @@ import ButtonText from '../../ui/ButtonText';
 import Spinner from '../../ui/Spinner';
 import { isKey } from '../../utils/helpers';
 import Empty from '../../ui/Empty';
+import ModalDialog from '../../ui/ModalDialog';
+import ConfirmDelete from '../../ui/ConfirmDelete';
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -27,6 +30,7 @@ function BookingDetail() {
   const moveBack = useMoveBack();
   const navigate = useNavigate();
   const { checkout, isCheckingOut } = useCheckout();
+  const { deleteBooking, isDeletingBooking } = useDeleteBooking();
 
   if (isLoading) return <Spinner />;
   if (!booking) return <Empty resource="booking" />;
@@ -53,24 +57,57 @@ function BookingDetail() {
 
       <BookingDataBox booking={booking} />
 
-      <ButtonGroup>
-        {/* показывать кнопку тольно для неподтвержденных броней */}
-        {status === 'unconfirmed' && (
-          <Button onClick={() => navigate(`/check-in/${bookingId}`)}>
-            Зарегистрировать
-          </Button>
-        )}
+      <ModalDialog>
+        <ButtonGroup>
+          <ModalDialog.Open
+            windowName="delete-booking"
+            render={(open) => (
+              <Button
+                variation="danger"
+                onClick={() => open()}
+                disabled={isDeletingBooking}
+              >
+                Удалить запись
+              </Button>
+            )}
+          />
 
-        {status === 'checked-in' && (
-          <Button onClick={() => checkout(bookingId)} disabled={isCheckingOut}>
-            Выписать
-          </Button>
-        )}
+          {/* показывать кнопку тольно для неподтвержденных броней */}
+          {status === 'unconfirmed' && (
+            <Button onClick={() => navigate(`/check-in/${bookingId}`)}>
+              Зарегистрировать
+            </Button>
+          )}
 
-        <Button variation="secondary" onClick={moveBack}>
-          Назад
-        </Button>
-      </ButtonGroup>
+          {status === 'checked-in' && (
+            <Button
+              onClick={() => checkout(bookingId)}
+              disabled={isCheckingOut}
+            >
+              Выписать
+            </Button>
+          )}
+
+          <Button variation="secondary" onClick={moveBack}>
+            Назад
+          </Button>
+        </ButtonGroup>
+        <ModalDialog.Window
+          windowName="delete-booking"
+          render={(close) => (
+            <ConfirmDelete
+              resourceName={`бронирование # - ${bookingId}`}
+              onConfirm={() =>
+                deleteBooking(bookingId, {
+                  onSettled: () => navigate(-1),
+                })
+              }
+              onCancel={close}
+              disabled={isDeletingBooking}
+            />
+          )}
+        />
+      </ModalDialog>
     </>
   );
 }

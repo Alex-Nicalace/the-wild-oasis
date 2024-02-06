@@ -72,11 +72,14 @@ function ModalDialog({ children }: { children: React.ReactNode }): JSX.Element {
 // компонент для открытия модального окна
 function Open({
   render,
+  windowName,
 }: {
-  render: (open: (name: string) => void) => JSX.Element;
+  render: (open: () => void) => JSX.Element;
+  windowName: string;
 }): JSX.Element {
   const { open } = useContext(ModalContext);
-  return <>{render(open)}</>;
+  const openWindow = () => open(windowName);
+  return <>{render(openWindow)}</>;
 }
 
 // компонент для модального окна

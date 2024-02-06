@@ -1,5 +1,11 @@
 # Примечания о проекте
 
+## pattern Compound component pattern & Render props pattern
+
+Модальное окно с 20-мя патернами проектирования:
+
+[ModalDialog.tsx](./src/ui/ModalDialog.tsx)
+
 ## react-hot-toast
 
 `react-hot-toast` - это библиотека для обработки уведомлений (тоастов) в React-приложениях.

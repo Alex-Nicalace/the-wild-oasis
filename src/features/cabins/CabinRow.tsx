@@ -112,21 +112,23 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
               </Menus.Button>
 
               <ModalDialog.Open
+                windowName="edit-cabin"
                 render={(open) => (
                   <Menus.Button
                     icon={<HiPencil />}
-                    onClick={() => open('edit-cabin')}
+                    onClick={() => open()}
                     disabled={isWorking}
                   >
-                    Edit
+                    Редактировать
                   </Menus.Button>
                 )}
               />
               <ModalDialog.Open
+                windowName="delete-cabin"
                 render={(open) => (
                   <Menus.Button
                     icon={<HiTrash />}
-                    onClick={() => open('delete-cabin')}
+                    onClick={() => open()}
                     disabled={isWorking}
                   >
                     Delete
