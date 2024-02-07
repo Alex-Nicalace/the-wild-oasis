@@ -98,3 +98,9 @@
 [apiAuth.ts](./src/services/apiAuth.ts)
 
 ## Авторизация пользователя
+
+Компонент, который проверяет авторизацию пользователя
+[ProtectedRoute.tsx](./src/ui/ProtectedRoute.tsx)
+
+Хук - обновляет авторизационные данные о пользователе в кэше
+[useUser.ts](./src/features/authentication/useUser.ts)
