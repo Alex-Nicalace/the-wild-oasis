@@ -104,3 +104,9 @@
 
 Хук - обновляет авторизационные данные о пользователе в кэше
 [useUser.ts](./src/features/authentication/useUser.ts)
+
+## Разлогирование пользователя
+
+[useLogout.ts](./src/features/authentication/useLogout.ts)
+
+[apiAuth.ts](./src/services/apiAuth.ts/)

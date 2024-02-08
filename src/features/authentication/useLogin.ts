@@ -16,7 +16,7 @@ export function useLogin() {
       // это проиходит с некоторой периодичностью и тем самым происходит проверка авторизации. есть смысл после аунтификации
       // сразу поместить данные о пользователе в кэш чтобы не делать лишний запрос за запросом
       queryClient.setQueryData(['user'], user.user);
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     },
     onError: (err) => {
       console.error(err);
