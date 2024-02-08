@@ -3,6 +3,7 @@ import Button from '../../ui/Button';
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Input from '../../ui/Input';
+import { useSignup } from './useSignup';
 
 type TSignupForm = {
   fullName: string;
@@ -16,10 +17,23 @@ function SignupForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<TSignupForm>();
 
+  const { signup, isSigning } = useSignup();
+
   // Обработчик события отправки формы
-  const onSubmit: SubmitHandler<TSignupForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<TSignupForm> = ({
+    email,
+    fullName,
+    password,
+  }) =>
+    signup(
+      { email, fullName, password },
+      {
+        onSettled: () => reset(),
+      }
+    );
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -27,6 +41,7 @@ function SignupForm() {
         <Input
           type="text"
           id="fullName"
+          disabled={isSigning}
           {...register('fullName', { required: 'Это поле обязательно' })}
         />
       </FormRow>
@@ -35,6 +50,7 @@ function SignupForm() {
         <Input
           type="email"
           id="email"
+          disabled={isSigning}
           {...register('email', {
             required: 'Это поле обязательно',
             pattern: {
@@ -52,6 +68,7 @@ function SignupForm() {
         <Input
           type="password"
           id="password"
+          disabled={isSigning}
           {...register('password', {
             required: 'Это поле обязательно',
             minLength: {
@@ -69,6 +86,7 @@ function SignupForm() {
         <Input
           type="password"
           id="passwordConfirm"
+          disabled={isSigning}
           {...register('passwordConfirm', {
             required: 'Это поле обязательно',
             // validate: (value) =>
@@ -81,10 +99,12 @@ function SignupForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" disabled={isSigning}>
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button type="submit" disabled={isSigning}>
+          Create new user
+        </Button>
       </FormRow>
     </Form>
   );
