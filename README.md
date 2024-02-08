@@ -24,6 +24,8 @@
 
 ## react-hook-form
 
+[SignupForm.tsx](./src/features/authentication/SignupForm.tsx)
+
 ## компонент _Menu.tsx_
 
 [Menus.tsx](./src/ui/Menus.tsx)

@@ -1,3 +1,4 @@
+import { isValidElement } from 'react';
 import styled from 'styled-components';
 
 const StyledFormRow = styled.div`
@@ -36,12 +37,29 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-interface IFormRowProps {
+type ControlJSX = {
   label?: string;
   children: JSX.Element;
   error?: string;
+};
+
+function isControlJSX(value: any): value is ControlJSX {
+  return typeof value === 'object' && isValidElement(value.children);
 }
-function FormRow({ children, label, error }: IFormRowProps): JSX.Element {
+
+type FormRowProps =
+  | ControlJSX
+  | {
+      children: React.ReactNode;
+    };
+function FormRow(props: FormRowProps): JSX.Element {
+  // const { children } = props;
+
+  if (!isControlJSX(props))
+    return <StyledFormRow>{props.children}</StyledFormRow>;
+
+  const { children, label, error } = props;
+
   return (
     <StyledFormRow>
       {label && <Label htmlFor={children.props?.id}>{label}</Label>}
