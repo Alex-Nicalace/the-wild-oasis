@@ -1,63 +1,69 @@
-import { useForm } from "react-hook-form";
-import Button from "../../ui/Button";
-import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
-import Input from "../../ui/Input";
+import { SubmitHandler, useForm } from 'react-hook-form';
+import Button from '../../ui/Button';
+import Form from '../../ui/Form';
+import FormRow from '../../ui/FormRow';
+import Input from '../../ui/Input';
 
-import { useUpdateUser } from "./useUpdateUser";
+import { useUpdateCurrentUser } from './useUpdateCurrentUser';
+
+type TUpdatePasswordForm = {
+  password: string;
+  passwordConfirm: string;
+};
 
 function UpdatePasswordForm() {
-  const { register, handleSubmit, formState, getValues, reset } = useForm();
+  const { register, handleSubmit, formState, reset } =
+    useForm<TUpdatePasswordForm>();
   const { errors } = formState;
 
-  const { updateUser, isUpdating } = useUpdateUser();
+  const { updateCurrentUser, isUpdatingUser } = useUpdateCurrentUser();
 
-  function onSubmit({ password }) {
-    updateUser({ password }, { onSuccess: reset });
-  }
+  const onSubmit: SubmitHandler<TUpdatePasswordForm> = ({ password }) => {
+    updateCurrentUser({ password }, { onSuccess: () => reset() });
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow
-        label="Password (min 8 characters)"
+        label="Новый пароль (мин. 8 символов)"
         error={errors?.password?.message}
       >
         <Input
           type="password"
           id="password"
           autoComplete="current-password"
-          disabled={isUpdating}
-          {...register("password", {
-            required: "This field is required",
+          disabled={isUpdatingUser}
+          {...register('password', {
+            required: 'Это поле обязательно',
             minLength: {
               value: 8,
-              message: "Password needs a minimum of 8 characters",
+              message: 'Пароль должен содержать не менее 8 символов',
             },
           })}
         />
       </FormRow>
 
       <FormRow
-        label="Confirm password"
+        label="Подтвердите пароль"
         error={errors?.passwordConfirm?.message}
       >
         <Input
           type="password"
           autoComplete="new-password"
           id="passwordConfirm"
-          disabled={isUpdating}
-          {...register("passwordConfirm", {
-            required: "This field is required",
-            validate: (value) =>
-              getValues().password === value || "Passwords need to match",
+          disabled={isUpdatingUser}
+          {...register('passwordConfirm', {
+            required: 'Это поле обязательно',
+            validate: (value, formValues) =>
+              formValues.password === value || 'Пароли должны совпадать',
           })}
         />
       </FormRow>
       <FormRow>
-        <Button onClick={reset} type="reset" variation="secondary">
-          Cancel
+        <Button onClick={() => reset()} type="reset" variation="secondary">
+          Отмена
         </Button>
-        <Button disabled={isUpdating}>Update password</Button>
+        <Button disabled={isUpdatingUser}>Обновить пароль</Button>
       </FormRow>
     </Form>
   );

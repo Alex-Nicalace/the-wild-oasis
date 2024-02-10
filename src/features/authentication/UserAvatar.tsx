@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useUser } from './useUser';
+import { TUserMetaData } from '../../services/apiAuth';
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -26,10 +27,7 @@ function UserAvatar(): JSX.Element {
 
   if (!user) return <> </>;
 
-  const { fullName, avatar } = user.user_metadata as {
-    fullName: string | null | undefined;
-    avatar: string | null | undefined;
-  };
+  const { fullName, avatar } = user.user_metadata as TUserMetaData;
 
   return (
     <StyledUserAvatar>

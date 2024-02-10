@@ -1,4 +1,5 @@
-import supabase from './supabase';
+import { randomString } from '../utils/helpers';
+import supabase, { supabaseUrl } from './supabase';
 
 export async function signup({
   email,
@@ -71,4 +72,53 @@ export async function getCurrentUser() {
   }
 
   return data.user;
+}
+
+export type TUserMetaData = {
+  fullName?: string;
+  avatar?: string;
+  password?: string;
+};
+export type TUserMetaDataForm = Omit<TUserMetaData, 'avatar'> & {
+  avatar?: File | null;
+};
+export async function updateCurrentUser({
+  fullName,
+  avatar,
+  password,
+}: TUserMetaDataForm) {
+  //  1. создать уникальный имя изображения
+  const imgName = avatar
+    ? `${randomString()}-${avatar.name}`.replace(/\//g, '')
+    : null;
+  const imgPath = avatar
+    ? `${supabaseUrl}/storage/v1/object/public/avatars/${imgName}`
+    : null;
+
+  // обновить пользователя в базе данных
+  const { data, error } = await supabase.auth.updateUser({
+    ...(password && { password }),
+    data: {
+      ...(fullName && { fullName }),
+      ...(imgPath && { avatar: imgPath }),
+    },
+  });
+
+  if (error) {
+    console.error(error);
+    throw new Error('Данные пользователя не обновлены!');
+  }
+
+  // 2. загрузить изображение
+  if (!imgName || !avatar) return data;
+
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(imgName, avatar);
+
+  if (uploadError) {
+    throw new Error('Аватар не загружен!');
+  }
+
+  return data;
 }
