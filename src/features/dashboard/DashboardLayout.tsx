@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -6,3 +6,16 @@ const StyledDashboardLayout = styled.div`
   grid-template-rows: auto 34rem auto;
   gap: 2.4rem;
 `;
+
+function DashboardLayout(): JSX.Element {
+  return (
+    <StyledDashboardLayout>
+      <div>Статистика</div>
+      <div>Cегодняшняя деятельность</div>
+      <div>Продолжительность пребывания</div>
+      <div>График продаж</div>
+    </StyledDashboardLayout>
+  );
+}
+
+export default DashboardLayout;
