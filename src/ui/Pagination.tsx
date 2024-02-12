@@ -62,7 +62,7 @@ const PaginationButton = styled.button<{ active?: boolean }>`
 type PaginationProps = {
   itemsCount: number;
 };
-function Pagination({ itemsCount }: PaginationProps): JSX.Element {
+function Pagination({ itemsCount }: PaginationProps): React.ReactNode {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = Number(searchParams.get('page') || 1);
@@ -82,7 +82,7 @@ function Pagination({ itemsCount }: PaginationProps): JSX.Element {
     changePage(currentPage + 1);
   }
 
-  if (totalPages <= 1) return <></>;
+  if (totalPages <= 1) return null;
 
   return (
     <StyledPagination>

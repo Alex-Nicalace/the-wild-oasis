@@ -89,14 +89,14 @@ function Window({
 }: {
   render: (close: () => void) => JSX.Element;
   windowName: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { close, openName } = useContext(ModalContext);
   const dialogEl = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     dialogEl.current?.showModal();
   });
 
-  if (openName !== windowName) return <></>;
+  if (openName !== windowName) return null;
 
   return createPortal(
     <StyledModal

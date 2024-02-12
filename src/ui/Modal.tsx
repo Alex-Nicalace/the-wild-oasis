@@ -93,10 +93,10 @@ function Window({
 }: {
   render: (close: () => void) => JSX.Element;
   windowName: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { close, openName } = useContext(ModalContext);
 
-  if (openName !== windowName) return <></>;
+  if (openName !== windowName) return null;
 
   return createPortal(
     <Overlay

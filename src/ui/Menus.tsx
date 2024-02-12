@@ -154,7 +154,7 @@ function List({
 }: {
   children: React.ReactNode;
   id: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { openId, position, close, isLockScroll } = useContext(MenusContext);
   const elenemtRef = useOutsideClick<HTMLUListElement>((e) => {
     if (e.target instanceof Element && e.target.closest('[data-istoggle]'))
@@ -163,7 +163,7 @@ function List({
   }, openId !== id);
   useLockElementScroll(openId !== id || !isLockScroll, 'main');
 
-  if (openId !== id) return <></>;
+  if (openId !== id) return null;
 
   if (isLockScroll)
     return createPortal(
