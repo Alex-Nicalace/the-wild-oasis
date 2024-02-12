@@ -112,3 +112,11 @@
 [useLogout.ts](./src/features/authentication/useLogout.ts)
 
 [apiAuth.ts](./src/services/apiAuth.ts/)
+
+## Переключение темного и светлого режимов
+
+[DarkModeContext.tsx](./src/context/DarkModeContext.tsx)
+
+[DarkModeToggle.tsx](./src/ui/DarkModeToggle.tsx)
+
+[useDarkModeContext.ts](./src/context/useDarkModeContext.ts)

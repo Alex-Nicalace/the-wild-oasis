@@ -1,5 +1,12 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
+/**
+ * Хук создает состояние, которое сохраняется в локальное хранилище браузера.
+ *
+ * @param {T} initialState - начальное значение состояния
+ * @param {string} key - ключ для сохранения в локальное хранилище
+ * @return {[T, Dispatch<SetStateAction<T>>]} массив, содержащий текущее значение состояния и функцию для его обновления
+ */
 export function useLocalStorageState<T>(
   initialState: T,
   key: string
