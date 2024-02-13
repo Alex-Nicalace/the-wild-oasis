@@ -27,5 +27,5 @@ export function useRecentStays() {
     [stays]
   );
 
-  return { isLoading, stays, confirmedStays };
+  return { isLoading, stays, confirmedStays, numDays };
 }
