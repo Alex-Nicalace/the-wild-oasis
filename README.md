@@ -26,6 +26,14 @@
 
 [SignupForm.tsx](./src/features/authentication/SignupForm.tsx)
 
+## date-fns
+
+`eachDayOfInterval` - массив дат в пределах указанного интервала времени
+
+`format` - отформатированную строку даты в заданном формате
+
+`subDays` - Вычтите указанное количество дней из заданной даты.
+
 ## компонент _Menu.tsx_
 
 [Menus.tsx](./src/ui/Menus.tsx)
