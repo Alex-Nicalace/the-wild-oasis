@@ -39,7 +39,7 @@ function Stats({
   return (
     <>
       <Stat
-        title="Бронирование"
+        title="Заказы"
         color="blue"
         icon={<HiOutlineBriefcase />}
         value={String(numBookings)}

@@ -11,12 +11,12 @@ export function useCheckout() {
       }),
 
     onSuccess: ({ id }) => {
-      toast.success(`Бронирование №${id} успешно разрегистрировано!`);
+      toast.success(`Заказ №${id} успешно выписан!`);
       // в случае успеха обновляем кеш. invalidateQueries делает кэш не действительным, что обновляет кеш
-      queryClient.invalidateQueries({ queryKey: ['booking', id] });
+      queryClient.invalidateQueries();
     },
     onError: (err) => {
-      toast.error('Во время разрегистрации произошла ошибка!');
+      toast.error('Во время выписки произошла ошибка!');
       console.error(err);
     },
   });

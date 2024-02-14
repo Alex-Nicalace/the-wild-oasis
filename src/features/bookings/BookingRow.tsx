@@ -124,7 +124,7 @@ function BookingRow({
               </Menus.Button>
             )}
 
-            {/* показывать кнопку тольно для зарегистрированных */}
+            {/* показывать кнопку тольно для вписанных */}
             {status === 'checked-in' && (
               <Menus.Button
                 icon={<HiArrowUpOnSquare />}
