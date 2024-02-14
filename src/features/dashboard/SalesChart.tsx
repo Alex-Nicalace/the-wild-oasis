@@ -9,7 +9,6 @@ import {
 } from 'recharts';
 import styled from 'styled-components';
 import { eachDayOfInterval, format, isSameDay, subDays } from 'date-fns';
-import { ru } from 'date-fns/locale';
 
 import DashboardBox from './DashboardBox';
 import Heading from '../../ui/Heading';
@@ -73,7 +72,7 @@ function SalesChart({ bookings, numDays }: SalesChartProps): JSX.Element {
 
   const data = allDates.map((date) => {
     return {
-      label: format(date, 'dd MMM', { locale: ru }),
+      label: format(date, 'dd MMM'),
       totalSales: bookings
         .filter((booking) => isSameDay(new Date(booking.created_at), date))
         .reduce((acc, cur) => acc + (cur.totalPrice ?? 0), 0),
@@ -99,7 +98,10 @@ function SalesChart({ bookings, numDays }: SalesChartProps): JSX.Element {
 
   return (
     <StyledSalesChart>
-      <Heading as="h3">Продажи</Heading>
+      <Heading as="h3">
+        Продажи с {format(allDates[0], 'dd MMM yyyy')} &mdash;{' '}
+        {format(allDates[allDates.length - 1], 'dd MMM yyyy')}
+      </Heading>
 
       {/* отзывчивый контейнер. Можно обойтись без него */}
       <ResponsiveContainer height={300} width="100%">

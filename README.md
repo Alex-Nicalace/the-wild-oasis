@@ -34,6 +34,20 @@
 
 `subDays` - Вычтите указанное количество дней из заданной даты.
 
+`setDefaultOptions` - установка глобальной лакали
+
+## recharts
+
+### AreaChart
+
+[SalesChart.tsx](./src/features/dashboard/SalesChart.tsx)
+
+### PieChart
+
+Круговая диаграмма
+
+[DurationChart.tsx](./src/features/dashboard/DurationChart.tsx)
+
 ## компонент _Menu.tsx_
 
 [Menus.tsx](./src/ui/Menus.tsx)
