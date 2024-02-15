@@ -142,3 +142,7 @@
 [DarkModeToggle.tsx](./src/ui/DarkModeToggle.tsx)
 
 [useDarkModeContext.ts](./src/context/useDarkModeContext.ts)
+
+## ErrorBoundary
+
+Своя реализация компонента `ErrorBoundary` [ErrorBoundary.tsx](./src/ui/ErrorBoundary.tsx)
