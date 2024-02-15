@@ -100,10 +100,10 @@ function SignupForm() {
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button variation="secondary" type="reset" disabled={isSigning}>
-          Cancel
+          Сброс
         </Button>
         <Button type="submit" disabled={isSigning}>
-          Create new user
+          Создать
         </Button>
       </FormRow>
     </Form>

@@ -13,7 +13,7 @@ function CabinTable(): JSX.Element {
 
   if (isLoading) return <Spinner />;
 
-  if (!cabins || cabins.length === 0) return <Empty resource="cabins" />;
+  if (!cabins || cabins.length === 0) return <Empty resource="номера" />;
 
   // 1. Filter
   const filterValue = searchParams.get('discount') || 'all';
@@ -54,10 +54,10 @@ function CabinTable(): JSX.Element {
       <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
         <Table.Header>
           <div></div>
-          <div>Cabin</div>
-          <div>Capacity</div>
-          <div>Price</div>
-          <div>Discount</div>
+          <div>Номер</div>
+          <div>Вместимость</div>
+          <div>Цена</div>
+          <div>Скидка</div>
           <div></div>
         </Table.Header>
         <Table.Body

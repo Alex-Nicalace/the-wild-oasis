@@ -7,7 +7,7 @@ function Bookings(): JSX.Element {
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1">All bookings</Heading>
+        <Heading as="h1">Все бронирования</Heading>
         <BookingTableOperations />
       </Row>
 

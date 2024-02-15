@@ -33,7 +33,7 @@ function BookingDetail() {
   const { deleteBooking, isDeletingBooking } = useDeleteBooking();
 
   if (isLoading) return <Spinner />;
-  if (!booking) return <Empty resource="booking" />;
+  if (!booking) return <Empty resource="бронирования" />;
 
   const { status, id: bookingId } = booking;
 

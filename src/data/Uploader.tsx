@@ -136,16 +136,17 @@ function Uploader() {
         display: 'flex',
         flexDirection: 'column',
         gap: '8px',
+        color: 'black',
       }}
     >
       <h3>SAMPLE DATA</h3>
 
       <Button onClick={uploadAll} disabled={isLoading}>
-        Upload ALL
+        Загрузить все
       </Button>
 
       <Button onClick={uploadBookings} disabled={isLoading}>
-        Upload bookings ONLY
+        Загрузить бронирования
       </Button>
     </div>
   );

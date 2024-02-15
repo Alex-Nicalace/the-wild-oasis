@@ -40,7 +40,7 @@ function CheckinBooking() {
   }, [booking?.isPaid]);
 
   if (isLoading) return <Spinner />;
-  if (!booking) return <Empty resource="booking" />;
+  if (!booking) return <Empty resource="бронирования" />;
 
   const {
     id: bookingId,

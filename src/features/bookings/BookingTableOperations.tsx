@@ -1,6 +1,6 @@
-import SortBy from "../../ui/SortBy";
-import Filter from "../../ui/Filter";
-import TableOperations from "../../ui/TableOperations";
+import SortBy from '../../ui/SortBy';
+import Filter from '../../ui/Filter';
+import TableOperations from '../../ui/TableOperations';
 
 function BookingTableOperations() {
   return (
@@ -8,22 +8,31 @@ function BookingTableOperations() {
       <Filter
         filterField="status"
         options={[
-          { value: "all", label: "All" },
-          { value: "checked-out", label: "Checked out" },
-          { value: "checked-in", label: "Checked in" },
-          { value: "unconfirmed", label: "Unconfirmed" },
+          { value: 'all', label: 'Все' },
+          { value: 'checked-out', label: 'Выписан' },
+          { value: 'checked-in', label: 'Вписан' },
+          { value: 'unconfirmed', label: 'Не подтвержден' },
         ]}
       />
 
       <SortBy
         options={[
-          { value: "startDate-desc", label: "Sort by date (recent first)" },
-          { value: "startDate-asc", label: "Sort by date (earlier first)" },
           {
-            value: "totalPrice-desc",
-            label: "Sort by amount (high first)",
+            value: 'startDate-desc',
+            label: 'Сортировка по дате (сначала недавняя)',
           },
-          { value: "totalPrice-asc", label: "Sort by amount (low first)" },
+          {
+            value: 'startDate-asc',
+            label: 'Сортировка по дате (сначала более ранняя)',
+          },
+          {
+            value: 'totalPrice-desc',
+            label: 'Сортировка по стоимости (сначала высокая)',
+          },
+          {
+            value: 'totalPrice-asc',
+            label: 'Сортировка по стоимости (сначала низкая)',
+          },
         ]}
       />
     </TableOperations>

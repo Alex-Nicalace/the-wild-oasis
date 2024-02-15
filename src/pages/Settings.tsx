@@ -5,7 +5,7 @@ import Row from '../ui/Row';
 function Settings(): JSX.Element {
   return (
     <Row>
-      <Heading as="h1">Update hotel settings</Heading>
+      <Heading as="h1">Обновить настройки отеля</Heading>
       <UpdateSettingsForm />
     </Row>
   );

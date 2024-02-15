@@ -4,7 +4,7 @@ import Heading from '../ui/Heading';
 function NewUsers(): JSX.Element {
   return (
     <>
-      <Heading as="h1">Create a new user</Heading>
+      <Heading as="h1">Новые пользователи</Heading>
       <SignupForm />
     </>
   );

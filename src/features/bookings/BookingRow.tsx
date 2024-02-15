@@ -52,11 +52,9 @@ type IBookingRowProps = { booking: TBookingWithCabinGuests };
 function BookingRow({
   booking: {
     id: bookingId,
-    created_at,
     startDate,
     endDate,
     numNights,
-    numGuests,
     totalPrice,
     status,
     guests,
@@ -71,10 +69,12 @@ function BookingRow({
   const { name: cabinName } = cabins || {};
 
   const statusToTagName = {
-    unconfirmed: 'blue',
-    'checked-in': 'green',
-    'checked-out': 'silver',
+    unconfirmed: { color: 'blue', label: 'Не подтвержден' },
+    'checked-in': { color: 'green', label: 'Вписан' },
+    'checked-out': { color: 'silver', label: 'Выписан' },
   };
+
+  const keyOfStatusToTagName = status as keyof typeof statusToTagName;
 
   return (
     <Table.Row>
@@ -98,8 +98,8 @@ function BookingRow({
         </span>
       </Stacked>
 
-      <Tag type={statusToTagName[status as keyof typeof statusToTagName]}>
-        {status?.replace('-', ' ')}
+      <Tag type={statusToTagName[keyOfStatusToTagName].color}>
+        {statusToTagName[keyOfStatusToTagName].label}
       </Tag>
 
       <Amount>{formatCurrency(totalPrice || 0)}</Amount>

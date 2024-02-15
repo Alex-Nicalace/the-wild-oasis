@@ -108,7 +108,7 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
                 disabled={isWorking}
                 icon={<HiSquare2Stack />}
               >
-                Duplicate
+                Дублировать
               </Menus.Button>
 
               <ModalDialog.Open
@@ -131,7 +131,7 @@ function CabinRow({ cabin }: ICabinRowProps): JSX.Element {
                     onClick={() => open()}
                     disabled={isWorking}
                   >
-                    Delete
+                    Удалить
                   </Menus.Button>
                 )}
               />

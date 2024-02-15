@@ -28,7 +28,7 @@ function UpdateSettingsForm(): JSX.Element {
 
   return (
     <Form>
-      <FormRow label="Minimum nights/booking">
+      <FormRow label="Минимум ночей/бронирования">
         <Input
           type="number"
           id="min-nights"
@@ -36,7 +36,7 @@ function UpdateSettingsForm(): JSX.Element {
           disabled={isEditing}
         />
       </FormRow>
-      <FormRow label="Maximum nights/booking">
+      <FormRow label="Максимум ночей/бронирования">
         <Input
           type="number"
           id="max-nights"
@@ -44,7 +44,7 @@ function UpdateSettingsForm(): JSX.Element {
           disabled={isEditing}
         />
       </FormRow>
-      <FormRow label="Maximum guests/booking">
+      <FormRow label="Максимум гостей/бронирования">
         <Input
           type="number"
           id="max-guests"
@@ -52,7 +52,7 @@ function UpdateSettingsForm(): JSX.Element {
           disabled={isEditing}
         />
       </FormRow>
-      <FormRow label="Breakfast price">
+      <FormRow label="Цена завтрака">
         <Input
           type="number"
           id="breakfast-price"

@@ -87,23 +87,23 @@ function Pagination({ itemsCount }: PaginationProps): React.ReactNode {
   return (
     <StyledPagination>
       <P>
-        Showing <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> to{' '}
+        Показано с <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> по{' '}
         <span>
           {currentPage === totalPages ? itemsCount : currentPage * PAGE_SIZE}
         </span>{' '}
-        of <span>{itemsCount}</span> results
+        из <span>{itemsCount}</span> записей
       </P>
 
       <Buttons>
         <PaginationButton onClick={handlePrevPage} disabled={currentPage === 1}>
           <HiChevronLeft />
-          <span>Previous</span>
+          <span>Предыдущая</span>
         </PaginationButton>
         <PaginationButton
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
         >
-          <span>Next</span>
+          <span>Следующая</span>
           <HiChevronRight />
         </PaginationButton>
       </Buttons>

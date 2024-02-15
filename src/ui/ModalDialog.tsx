@@ -13,6 +13,7 @@ const StyledModal = styled.dialog`
   border: none;
   padding: 3.2rem 4rem;
   transition: all 0.5s;
+  color: var(--color-grey-600);
   &::backdrop {
     background-color: var(--backdrop-color);
     backdrop-filter: blur(4px);

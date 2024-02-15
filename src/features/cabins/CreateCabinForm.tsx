@@ -77,73 +77,73 @@ function CreateCabinForm({ cabinToEdit, onCloseModal }: ICreateCabinFormProps) {
       onSubmit={handleSubmit(onSubmit, onError)}
       type={onCloseModal ? 'modal' : 'regular'}
     >
-      <FormRow label="Cabin name" error={errors.name?.message}>
+      <FormRow label="Название номера" error={errors.name?.message}>
         {/* Регистрируем инпут в форме с помощью функции "register" */}
         <Input
           type="text"
           id="name"
           disabled={isWorking}
-          {...register('name', { required: 'This field is required' })}
+          {...register('name', { required: 'Это поле обязательно' })}
         />
       </FormRow>
 
-      <FormRow label="Maximum capacity" error={errors.maxCapacity?.message}>
+      <FormRow label="Макс. вместимость" error={errors.maxCapacity?.message}>
         <Input
           type="number"
           id="maxCapacity"
           disabled={isWorking}
           {...register('maxCapacity', {
-            required: 'This field is required',
-            min: { value: 1, message: 'Minimum value is 1' },
+            required: 'Это поле обязательно',
+            min: { value: 1, message: 'Минимальное значение 1' },
             valueAsNumber: true,
           })}
         />
       </FormRow>
 
-      <FormRow label="Regular price" error={errors.regularPrice?.message}>
+      <FormRow label="Цена" error={errors.regularPrice?.message}>
         <Input
           type="number"
           id="regularPrice"
           disabled={isWorking}
           {...register('regularPrice', {
             valueAsNumber: true,
-            required: 'This field is required',
-            min: { value: 1, message: 'Minimum value is 1' },
+            required: 'Это поле обязательно',
+            min: { value: 1, message: 'Минимальное значение 1' },
           })}
         />
       </FormRow>
 
-      <FormRow label="Discount" error={errors.discount?.message}>
+      <FormRow label="Скидка" error={errors.discount?.message}>
         <Input
           type="number"
           id="discount"
           defaultValue={0}
           disabled={isWorking}
           {...register('discount', {
-            required: 'This field is required',
+            required: 'Это поле обязательно',
             valueAsNumber: true,
             validate: (value) =>
               (value >= 0 && value < getValues().regularPrice) ||
-              'Discount must be less than regular price',
+              'Скидка должна быть меньше обычной цены',
           })}
         />
       </FormRow>
 
-      <FormRow label="Description" error={errors.descr?.message}>
+      <FormRow label="Описание" error={errors.descr?.message}>
         <Textarea
           id="description"
           disabled={isWorking}
           defaultValue=""
-          {...register('descr', { required: 'This field is required' })}
+          {...register('descr', { required: 'Это поле обязательно' })}
         />
       </FormRow>
 
-      <FormRow label="Cabin photo" error={errors.image?.message}>
+      <FormRow label="Фото номера" error={errors.image?.message}>
         <FileInput
           id="image"
           accept="image/*"
           {...register('image', {
-            required: editId ? false : 'This field is required',
+            required: editId ? false : 'Это поле обязательно',
           })}
           disabled={isWorking}
         />
@@ -153,9 +153,11 @@ function CreateCabinForm({ cabinToEdit, onCloseModal }: ICreateCabinFormProps) {
         {/* type is an HTML attribute! */}
         <>
           <Button variation="secondary" type="reset" onClick={onCloseModal}>
-            Cancel
+            Отменить
           </Button>
-          <Button disabled={isWorking}>{editId ? 'Edit' : 'Add cabin'}</Button>
+          <Button disabled={isWorking}>
+            {editId ? 'Редактировать' : 'Создать номер'}
+          </Button>
         </>
       </FormRow>
     </Form>

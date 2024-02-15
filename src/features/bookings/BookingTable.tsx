@@ -11,17 +11,18 @@ function BookingTable() {
 
   if (isLoading) return <Spinner />;
 
-  if (!bookings || bookings.length === 0) return <Empty resource="bookings" />;
+  if (!bookings || bookings.length === 0)
+    return <Empty resource="бронирования" />;
 
   return (
     <Menus>
       <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
         <Table.Header>
-          <div>Cabin</div>
-          <div>Guest</div>
-          <div>Dates</div>
-          <div>Status</div>
-          <div>Amount</div>
+          <div>Номер</div>
+          <div>Гость</div>
+          <div>Даты</div>
+          <div>Статус</div>
+          <div>Стоимость</div>
           <div></div>
         </Table.Header>
 

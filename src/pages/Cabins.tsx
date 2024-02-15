@@ -10,7 +10,7 @@ function Cabins(): JSX.Element {
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1">All cabins</Heading>
+        <Heading as="h1">Все номера</Heading>
         <CabinTableOperations />
       </Row>
 

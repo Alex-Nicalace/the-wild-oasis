@@ -9,9 +9,9 @@ function CabinTableOperations(): JSX.Element {
       <Filter
         filterField="discount"
         options={[
-          { value: 'all', label: 'All' },
-          { value: 'with-discount', label: 'With discount' },
-          { value: 'no-discount', label: 'No discount' },
+          { value: 'all', label: 'Все' },
+          { value: 'with-discount', label: 'Со скидкой' },
+          { value: 'no-discount', label: 'Без скидки' },
         ]}
       />
       <SortBy

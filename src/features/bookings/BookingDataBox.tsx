@@ -135,14 +135,14 @@ function BookingDataBox({ booking }: BookingDataBoxProps) {
         <div>
           <HiOutlineHomeModern />
           <p>
-            {numNights} nights in Cabin <span>{cabinName}</span>
+            {numNights} ночей в номере <span>{cabinName}</span>
           </p>
         </div>
 
         <p>
           {format(new Date(startDate ?? ''), 'EEE, MMM dd yyyy')} (
           {isToday(new Date(startDate ?? ''))
-            ? 'Today'
+            ? 'Сегодня'
             : formatDistanceFromNow(startDate ?? '')}
           ) &mdash; {format(new Date(endDate ?? ''), 'EEE, MMM dd yyyy')}
         </p>
@@ -155,7 +155,7 @@ function BookingDataBox({ booking }: BookingDataBoxProps) {
           )}
           <p>
             {guestName}{' '}
-            {(numGuests ?? 0) > 1 ? `+ ${(numGuests ?? 0) - 1} guests` : ''}
+            {(numGuests ?? 0) > 1 ? `+ ${(numGuests ?? 0) - 1} гостей` : ''}
           </p>
           <span>&bull;</span>
           <p>{email}</p>
@@ -166,32 +166,34 @@ function BookingDataBox({ booking }: BookingDataBoxProps) {
         {observations && (
           <DataItem
             icon={<HiOutlineChatBubbleBottomCenterText />}
-            label="Observations"
+            label="Примечания"
           >
             {observations}
           </DataItem>
         )}
 
-        <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
-          {hasBreakfast ? 'Yes' : 'No'}
+        <DataItem icon={<HiOutlineCheckCircle />} label="Завтрак включен?">
+          {hasBreakfast ? 'Да' : 'Нет'}
         </DataItem>
 
         <Price isPaid={isPaid}>
-          <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
+          <DataItem icon={<HiOutlineCurrencyDollar />} label={`Итоговая цена`}>
             {formatCurrency(totalPrice ?? 0)}
 
             {hasBreakfast &&
-              ` (${formatCurrency(cabinPrice ?? 0)} cabin + ${formatCurrency(
+              ` (${formatCurrency(cabinPrice ?? 0)} номер + ${formatCurrency(
                 extraPrice ?? 0
-              )} breakfast)`}
+              )} завтрак)`}
           </DataItem>
 
-          <p>{isPaid ? 'Paid' : 'Will pay at property'}</p>
+          <p>{isPaid ? 'Оплачено' : 'Оплатит в отеле'}</p>
         </Price>
       </Section>
 
       <Footer>
-        <p>Booked {format(new Date(created_at), 'EEE, MMM dd yyyy, p')}</p>
+        <p>
+          Забронировано {format(new Date(created_at), 'EEE, MMM dd yyyy, p')}
+        </p>
       </Footer>
     </StyledBookingDataBox>
   );

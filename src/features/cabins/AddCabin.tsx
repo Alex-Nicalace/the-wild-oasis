@@ -9,8 +9,9 @@ function AddCabin(): JSX.Element {
       <ModalDialog>
         {/* компонент для открытия модального окна */}
         <ModalDialog.Open
+          windowName="create-cabin"
           render={(open) => (
-            <Button onClick={() => open('create-cabin')}>Add new cabin</Button>
+            <Button onClick={() => open()}>Добавить номер</Button>
           )}
         />
         {/* компонент для модального окна */}
