@@ -150,3 +150,6 @@
 ## Цветоввая схема по умолчанию
 
 [DarkModeContext.tsx](./src/context/DarkModeContext.tsx)
+
+alex@example.com
+pas123
