@@ -146,3 +146,7 @@
 ## ErrorBoundary
 
 Своя реализация компонента `ErrorBoundary` [ErrorBoundary.tsx](./src/ui/ErrorBoundary.tsx)
+
+## Цветоввая схема по умолчанию
+
+[DarkModeContext.tsx](./src/context/DarkModeContext.tsx)
